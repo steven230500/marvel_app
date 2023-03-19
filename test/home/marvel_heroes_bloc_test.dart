@@ -1,4 +1,4 @@
-/* import 'package:bloc_test/bloc_test.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:marvel_app/blocs/marvel_heroes/bloc.dart';
@@ -48,11 +48,8 @@ void main() {
     blocTest<MarvelHeroesBloc, MarvelHeroesState>(
       'emits [loading, loaded] when GetDataHeroes is added',
       build: () {
-        when(() => heroesRepository.fetchMarvelHeroes(offset: 0)).thenAnswer(
-          (_) async {
-            return Right(testHeroes);
-          },
-        );
+        when(heroesRepository.fetchMarvelHeroes(offset: 0)).thenAnswer(
+            (_) async => Right<ApiError, List<MarvelCharacter>>(testHeroes));
         return marvelHeroesBloc;
       },
       act: (bloc) => bloc.add(GetDataHeroes()),
@@ -70,8 +67,8 @@ void main() {
     blocTest<MarvelHeroesBloc, MarvelHeroesState>(
       'emits [loading, error] when a server error occurs',
       build: () {
-        when(() => heroesRepository.fetchMarvelHeroes(offset: 0))
-            .thenAnswer((_) async => Left(apiError));
+        when(heroesRepository.fetchMarvelHeroes(offset: 0)).thenAnswer(
+            (_) async => Left<ApiError, List<MarvelCharacter>>(apiError));
         return marvelHeroesBloc;
       },
       act: (bloc) => bloc.add(GetDataHeroes()),
@@ -82,4 +79,3 @@ void main() {
     );
   });
 }
- */

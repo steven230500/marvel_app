@@ -5,10 +5,12 @@ import 'package:marvel_app/blocs/marvel_heroes/bloc.dart';
 import 'package:marvel_app/helpers/error.dart';
 import 'package:marvel_app/models/marvel.dart';
 import 'package:marvel_app/repositories/heroes.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockHeroesRepository extends Mock implements HeroesRepository {}
+import 'marvel_heroes_bloc_test.mocks.dart';
 
+@GenerateMocks([HeroesRepository])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -39,17 +41,16 @@ void main() {
     code: 500,
   );
 
-  setUp(() {
-    heroesRepository = MockHeroesRepository();
-    marvelHeroesBloc = MarvelHeroesBloc(heroesRepository);
-  });
-
   group('MarvelHeroesBloc', () {
     blocTest<MarvelHeroesBloc, MarvelHeroesState>(
       'emits [loading, loaded] when GetDataHeroes is added',
       build: () {
+        heroesRepository = MockHeroesRepository(); // Utiliza el mock generado
         when(heroesRepository.fetchMarvelHeroes(offset: 0)).thenAnswer(
-            (_) async => Right<ApiError, List<MarvelCharacter>>(testHeroes));
+          (invocation) async =>
+              Right<ApiError, List<MarvelCharacter>>(testHeroes),
+        );
+        marvelHeroesBloc = MarvelHeroesBloc(heroesRepository);
         return marvelHeroesBloc;
       },
       act: (bloc) => bloc.add(GetDataHeroes()),
@@ -67,8 +68,11 @@ void main() {
     blocTest<MarvelHeroesBloc, MarvelHeroesState>(
       'emits [loading, error] when a server error occurs',
       build: () {
+        heroesRepository = MockHeroesRepository(); // Utiliza el mock generado
         when(heroesRepository.fetchMarvelHeroes(offset: 0)).thenAnswer(
-            (_) async => Left<ApiError, List<MarvelCharacter>>(apiError));
+          (invocation) async => Left<ApiError, List<MarvelCharacter>>(apiError),
+        );
+        marvelHeroesBloc = MarvelHeroesBloc(heroesRepository);
         return marvelHeroesBloc;
       },
       act: (bloc) => bloc.add(GetDataHeroes()),

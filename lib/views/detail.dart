@@ -61,13 +61,13 @@ class _Body extends StatelessWidget {
           if (state is DetailsLoaded) {
             return ListView(
               children: [
-                _buildSectionHeader(context, 'Comics'),
+                const HeaderSection(title: 'Comics'),
                 ComicItem(items: state.model.comics),
-                _buildSectionHeader(context, 'Events'),
+                const HeaderSection(title: 'Events'),
                 EventItem(items: state.model.events),
-                _buildSectionHeader(context, 'Series'),
+                const HeaderSection(title: 'Series'),
                 SeriesItem(items: state.model.series),
-                _buildSectionHeader(context, 'Stories'),
+                const HeaderSection(title: 'Stories'),
                 StoryItem(items: state.model.stories),
               ],
             );
@@ -82,12 +82,18 @@ class _Body extends StatelessWidget {
   }
 }
 
-Widget _buildSectionHeader(BuildContext context, String title) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    child: Text(
-      title,
-      style: Theme.of(context).textTheme.headline6,
-    ),
-  );
+class HeaderSection extends StatelessWidget {
+  final String title;
+  const HeaderSection({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+    );
+  }
 }

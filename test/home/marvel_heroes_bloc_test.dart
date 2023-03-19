@@ -45,7 +45,7 @@ void main() {
     blocTest<MarvelHeroesBloc, MarvelHeroesState>(
       'emits [loading, loaded] when GetDataHeroes is added',
       build: () {
-        heroesRepository = MockHeroesRepository(); // Utiliza el mock generado
+        heroesRepository = MockHeroesRepository();
         when(heroesRepository.fetchMarvelHeroes(offset: 0)).thenAnswer(
           (invocation) async =>
               Right<ApiError, List<MarvelCharacter>>(testHeroes),
@@ -68,7 +68,7 @@ void main() {
     blocTest<MarvelHeroesBloc, MarvelHeroesState>(
       'emits [loading, error] when a server error occurs',
       build: () {
-        heroesRepository = MockHeroesRepository(); // Utiliza el mock generado
+        heroesRepository = MockHeroesRepository();
         when(heroesRepository.fetchMarvelHeroes(offset: 0)).thenAnswer(
           (invocation) async => Left<ApiError, List<MarvelCharacter>>(apiError),
         );
